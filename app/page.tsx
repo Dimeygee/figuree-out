@@ -1,12 +1,8 @@
-
-import Wrapper from "./components/container"
-
+import Container from "./components/container";
 
 export default function Home() {
   return (
-    <Wrapper>
-
-    </Wrapper>
+    <Container />
   );
 }
 
