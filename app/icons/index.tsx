@@ -29,7 +29,6 @@ export const BarSvg = () => {
   );
 };
 
-
 export const ArrowLeft = () => {
   return (
     <svg
@@ -54,7 +53,7 @@ export const ArrowLeft = () => {
       />
     </svg>
   );
-}
+};
 
 export const ArrowRight = () => {
   return (
@@ -65,14 +64,8 @@ export const ArrowRight = () => {
       viewBox="0 0 50 50"
       fill="none"
     >
-      <g >
-        <circle
-          cx="25"
-          cy="25"
-          r="24.5"
-          stroke="#42567A"
-          strokeOpacity="0.5"
-        />
+      <g>
+        <circle cx="25" cy="25" r="24.5" stroke="#42567A" strokeOpacity="0.5" />
         <path
           d="M22.5 18.75L28.75 25L22.5 31.25"
           stroke="#42567A"
@@ -81,5 +74,18 @@ export const ArrowRight = () => {
       </g>
     </svg>
   );
-}
+};
 
+export const SliderArrow = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="8"
+      height="12"
+      viewBox="0 0 8 12"
+      fill="none"
+    >
+      <path d="M1 1L6 6L1 11" stroke="#3877EE" strokeWidth="2" />
+    </svg>
+  );
+};

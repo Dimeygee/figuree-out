@@ -5,6 +5,7 @@ import { useState } from "react";
 import { BarSvg, ArrowLeft, ArrowRight } from "../icons/index";
 import { Date } from "./date";
 import { Slider } from "./slider";
+import { historicalData } from "../lib/historicdata";
 
 interface NumberProps {
   deg: number;
@@ -15,6 +16,8 @@ interface NumberProps {
 export default function Container() {
   const [activeIndex, setActiveIndex] = useState(6);
   const [rotation, setRotation] = useState(0);
+
+   const currentData = historicalData[activeIndex - 1];
 
   const handleNumberClick = (index: number, deg: number) => {
     let diff = 300 - deg;
@@ -76,12 +79,16 @@ export default function Container() {
               <ArrowLeft />
             </span>
             <span onClick={() => handleArrowClick("right")}>
-              <ArrowRight  />
+              <ArrowRight />
             </span>
           </ArrowBox>
-          <Slider />
+          <Slider data={currentData} activeIndex={activeIndex} />
         </DateSettingsWrapper>
-        <Date />
+        <Date
+          activeIndex={activeIndex}
+          fromYear={currentData.fromYear}
+          toYear={currentData.toYear}
+        />
       </Wrapper>
       <Bar>
         <BarSvg />
@@ -232,6 +239,8 @@ const DateSettingsWrapper = styled.div`
   padding: 0 80px;
   position: absolute;
   bottom: 0;
+  width:100%;
+  z-index:100;
 `;
 
 const DateBox = styled.div`
