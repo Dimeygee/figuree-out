@@ -3,7 +3,7 @@
 
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "swiper/css";
 import { SliderArrow } from "../icons";
 
@@ -20,31 +20,22 @@ export interface HistoricalData {
 
 interface SliderProps {
   data: HistoricalData;
-  activeIndex: number;
+  fading:boolean
 }
 
-export const Slider: React.FC<SliderProps> = ({ data, activeIndex }) => {
+export const Slider: React.FC<SliderProps> = ({
+  data,
+  fading,
+}) => {
   const [showLeftArrow, setShowLeftArrow] = useState(false);
-  const [fadeOpacity, setFadeOpacity] = useState(0); 
-
   const handleSlideChange = (swiper: any) => {
     setShowLeftArrow(swiper.activeIndex > 0);
   };
 
   
-   useEffect(() => {
-     setFadeOpacity(0);
-
-     const timer = setTimeout(() => {
-       setFadeOpacity(1);
-     }, 1000);
-
-     return () => clearTimeout(timer);
-   }, [activeIndex]);
-
 
   return (
-    <SwiperSlideWrapper fadeOpacity={fadeOpacity}>
+    <SwiperSlideWrapper className={fading ? "fading" : ""}>
       {showLeftArrow && (
         <Arrow className="swiper-button-prev">
           <SliderArrow />
@@ -110,6 +101,9 @@ const SlideContent = styled.div`
   justify-content: flex-start;
   gap: 15px;
   padding: 54px 0;
+  @media screen and (max-width: 540px) {
+    width: 166px;
+  }
 
   h3 {
     margin: 0;
@@ -117,15 +111,29 @@ const SlideContent = styled.div`
     color: #3877ee;
     text-transform: uppercase;
     line-height: 120%;
+    @media screen and (max-width: 540px) {
+      font-size: 16px;
+    }
   }
 
   p {
     font-size: 20px;
     color: #42567a;
     line-height: 30px;
+    @media screen and (max-width: 540px) {
+      font-size: 14px;
+    }
   }
 `;
-const SwiperSlideWrapper = styled.div<{ fadeOpacity: number }>`
-  
-  position:relative; 
+const SwiperSlideWrapper = styled.div`
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+  position:relative;
+  z-index:100;
+
+  &.fading {
+    opacity: 0;
+  }
+
+  position: relative;
 `;

@@ -1,51 +1,80 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-"use client";
-
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { historicalData } from "../lib/historicdata";
 
 interface DateProps {
-  fromYear: number;
-  toYear: number;
   activeIndex: number;
 }
 
-export const Date = ({ fromYear, toYear, activeIndex }: DateProps) => {
-  const [currentFromYear, setCurrentFromYear] = useState(fromYear);
-  const [currentToYear, setCurrentToYear] = useState(toYear);
+export const Date = ({ activeIndex }: DateProps) => {
+  const currentData = historicalData[activeIndex - 1]; 
+
+  const [fromYear, setFromYear] = useState<number>(currentData.fromYear);
+  const [toYear, setToYear] = useState<number>(currentData.toYear);
+  
 
   useEffect(() => {
     const animateYears = () => {
-      const startFromYear = fromYear;
-      const endFromYear = fromYear + activeIndex - 1; 
-      const startToYear = toYear - (6 - activeIndex); 
-      let currentFrom = startFromYear;
-      const intervalFromYear = setInterval(() => {
-        if (currentFrom < endFromYear) {
-          currentFrom++;
-          setCurrentFromYear(currentFrom);
-        } else {
-          clearInterval(intervalFromYear);
-        }
-      }, 50); 
-      let currentTo = startToYear;
-      const intervalToYear = setInterval(() => {
-        if (currentTo < toYear) {
-          currentTo++;
-          setCurrentToYear(currentTo);
-        } else {
-          clearInterval(intervalToYear);
-        }
-      }, 50); 
+      const targetFromYear = currentData.fromYear;
+      const targetToYear = currentData.toYear;
+
+
+      if (fromYear !== targetFromYear) {
+        const intervalFromYear = setInterval(() => {
+          if (fromYear < targetFromYear) {
+            setFromYear((prev) => {
+              const newValue = prev + 1;
+              if (newValue >= targetFromYear) {
+                clearInterval(intervalFromYear);
+                return targetFromYear; 
+              }
+              return newValue;
+            });
+          } else if (fromYear > targetFromYear) {
+            setFromYear((prev) => {
+              const newValue = prev - 1;
+              if (newValue <= targetFromYear) {
+                clearInterval(intervalFromYear);
+                return targetFromYear; 
+              }
+              return newValue;
+            });
+          }
+        }, 50); 
+      }
+
+      if (toYear !== targetToYear) {
+        const intervalToYear = setInterval(() => {
+          if (toYear < targetToYear) {
+            setToYear((prev) => {
+              const newValue = prev + 1;
+              if (newValue >= targetToYear) {
+                clearInterval(intervalToYear);
+                return targetToYear; 
+              }
+              return newValue;
+            });
+          } else if (toYear > targetToYear) {
+            setToYear((prev) => {
+              const newValue = prev - 1;
+              if (newValue <= targetToYear) {
+                clearInterval(intervalToYear);
+                return targetToYear; 
+              }
+              return newValue;
+            });
+          }
+        }, 50); 
+      }
     };
 
-    animateYears();
-  }, [activeIndex, fromYear, toYear]);
+    animateYears(); 
+  }, [activeIndex, fromYear, toYear, currentData.fromYear, currentData.toYear]);
 
   return (
     <DateWrapper>
-      <PrevDate>2015</PrevDate>
-      <LatestDate>2022</LatestDate>
+      <PrevDate>{fromYear}</PrevDate>
+      <LatestDate>{toYear}</LatestDate>
     </DateWrapper>
   );
 };
@@ -63,6 +92,13 @@ const DateWrapper = styled.div`
   font-style: normal;
   line-height: 160px;
   letter-spacing: -4px;
+  @media screen and (max-width:540px){
+    font-size: 56px;
+    line-height: normal;
+    letter-spacing: -1.12px;
+    gap:50px;
+    top:35%;
+  }
 `;
 
 const PrevDate = styled.span`
@@ -70,5 +106,5 @@ const PrevDate = styled.span`
 `;
 
 const LatestDate = styled.span`
-  color: #EF5DA8;
+  color: #ef5da8;
 `;

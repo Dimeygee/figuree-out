@@ -2,10 +2,9 @@
 
 import styled, { css } from "styled-components";
 import { useState } from "react";
-import { BarSvg, ArrowLeft, ArrowRight } from "../icons/index";
-import { Date } from "./date";
-import { Slider } from "./slider";
-import { historicalData } from "../lib/historicdata";
+import { BarSvg } from "../icons/index";
+
+import { DateSettings } from "./datasettings";
 
 interface NumberProps {
   deg: number;
@@ -15,9 +14,8 @@ interface NumberProps {
 
 export default function Container() {
   const [activeIndex, setActiveIndex] = useState(6);
-  const [rotation, setRotation] = useState(0);
 
-   const currentData = historicalData[activeIndex - 1];
+  const [rotation, setRotation] = useState(0);
 
   const handleNumberClick = (index: number, deg: number) => {
     let diff = 300 - deg;
@@ -34,23 +32,6 @@ export default function Container() {
 
     setRotation(diff);
     setActiveIndex(index);
-  };
-
-  const handleArrowClick = (direction: "left" | "right") => {
-    const increment = 60;
-    let newRotation = rotation;
-    let newIndex = activeIndex;
-
-    if (direction === "right") {
-      newRotation += increment;
-      newIndex = newIndex === 6 ? 1 : newIndex + 1;
-    } else if (direction === "left") {
-      newRotation -= increment;
-      newIndex = newIndex === 1 ? 6 : newIndex - 1;
-    }
-
-    setRotation(newRotation);
-    setActiveIndex(newIndex);
   };
 
   return (
@@ -70,33 +51,22 @@ export default function Container() {
             </Number>
           ))}
         </Circle>
-        <DateSettingsWrapper>
-          <DateBox>
-            <span>0{activeIndex}</span>/<span>06</span>
-          </DateBox>
-          <ArrowBox>
-            <span onClick={() => handleArrowClick("left")}>
-              <ArrowLeft />
-            </span>
-            <span onClick={() => handleArrowClick("right")}>
-              <ArrowRight />
-            </span>
-          </ArrowBox>
-          <Slider data={currentData} activeIndex={activeIndex} />
-        </DateSettingsWrapper>
-        <Date
+        <DateSettings
           activeIndex={activeIndex}
-          fromYear={currentData.fromYear}
-          toYear={currentData.toYear}
+          setActiveIndex={setActiveIndex}
+          rotation={rotation}
+          setRotation={setRotation}
         />
+        <Bar>
+          <SvgWrapper>
+            <BarSvg />
+          </SvgWrapper>
+          <Text>
+            <span>Исторические</span>
+            <span>даты</span>
+          </Text>
+        </Bar>
       </Wrapper>
-      <Bar>
-        <BarSvg />
-        <Text>
-          <span>Исторические</span>
-          <span>даты</span>
-        </Text>
-      </Bar>
     </>
   );
 }
@@ -119,6 +89,7 @@ const Wrapper = styled.div`
     transform: translateX(-50%);
     left: 50%;
     background-color: rgba(66, 86, 122, 0.1);
+    display: block;
   }
   &::after {
     content: "";
@@ -128,16 +99,36 @@ const Wrapper = styled.div`
     transform: translateY(-50%);
     top: 50%;
     background-color: rgba(66, 86, 122, 0.1);
+    display: block;
+  }
+  @media screen and (max-width: 540px) {
+    margin-left: 20px;
+    margin-right: 20px;
+    border-left: none;
+    border-right: none;
+    &::before {
+      display: none;
+    }
   }
 `;
 
 const Bar = styled.span`
   position: absolute;
   top: 117px;
-  left: 320px;
+  left: 0;
   display: flex;
   gap: 78px;
   align-items: center;
+  @media screen and (max-width: 540px) {
+    top:59px;
+  }
+`;
+
+const SvgWrapper = styled.span`
+  display: flex;
+  @media screen and (max-width: 540px) {
+    display: none;
+  }
 `;
 
 const Text = styled.span`
@@ -149,6 +140,9 @@ const Text = styled.span`
   line-height: 120%;
   display: flex;
   flex-direction: column;
+  @media screen and (max-width: 540px) {
+    font-size: 20px;
+  }
 `;
 
 interface CircleProps {
@@ -167,9 +161,11 @@ const Circle = styled.div<CircleProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
   transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 50;
+  @media screen and (max-width: 540px) {
+    display: none;
+  }
 `;
 
 const Number = styled.div<NumberProps>`
@@ -233,25 +229,4 @@ const Number = styled.div<NumberProps>`
       font-size: 20px;
       color: #42567a;
     `}
-`;
-
-const DateSettingsWrapper = styled.div`
-  padding: 0 80px;
-  position: absolute;
-  bottom: 0;
-  width:100%;
-  z-index:100;
-`;
-
-const DateBox = styled.div`
-  display: flex;
-  color: #42567a;
-  font-size: 14px;
-`;
-
-const ArrowBox = styled.div`
-  display: flex;
-  margin-top: 20px;
-  gap: 20px;
-  align-items: center;
 `;
