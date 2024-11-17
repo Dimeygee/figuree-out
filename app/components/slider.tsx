@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
+"use client"
 
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { useState } from "react";
 import "swiper/css";
-import { SliderArrow } from "../icons";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { Navigation, Pagination } from "swiper/modules";
 
 export interface HistoricalEvent {
   year: number;
@@ -20,39 +20,27 @@ export interface HistoricalData {
 
 interface SliderProps {
   data: HistoricalData;
-  fading:boolean
+  fading: boolean;
 }
 
-export const Slider: React.FC<SliderProps> = ({
-  data,
-  fading,
-}) => {
-  const [showLeftArrow, setShowLeftArrow] = useState(false);
-  const handleSlideChange = (swiper: any) => {
-    setShowLeftArrow(swiper.activeIndex > 0);
-  };
-
-  
-
+export const Slider: React.FC<SliderProps> = ({ data, fading }) => {
   return (
     <SwiperSlideWrapper className={fading ? "fading" : ""}>
-      {showLeftArrow && (
-        <Arrow className="swiper-button-prev">
-          <SliderArrow />
-        </Arrow>
-      )}
-      <Arrow className="swiper-button-next">
-        <SliderArrow />
-      </Arrow>
+      <Arrow className="swiper-button-prev"></Arrow>
+      <Arrow className="swiper-button-next"></Arrow>
 
       <Swiper
         slidesPerView={"auto"}
         spaceBetween={80}
-        onSlideChange={handleSlideChange}
         navigation={{
           nextEl: ".swiper-button-next",
           prevEl: ".swiper-button-prev",
         }}
+        pagination={{
+          clickable: true,
+          el: ".swiper-pagination", 
+        }}
+        modules={[Navigation, Pagination]}
       >
         {data.events.map((event, index) => (
           <SwiperSlide key={index} style={{ width: "auto" }}>
@@ -63,6 +51,7 @@ export const Slider: React.FC<SliderProps> = ({
           </SwiperSlide>
         ))}
       </Swiper>
+      <PaginationWrapper className="swiper-pagination"></PaginationWrapper>
     </SwiperSlideWrapper>
   );
 };
@@ -72,7 +61,8 @@ const Arrow = styled.div`
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  font-size: 24px;
+  font-size: 16px;
+  font-weight: 600;
   color: #42567a;
   cursor: pointer;
   width: 40px;
@@ -82,15 +72,48 @@ const Arrow = styled.div`
   align-items: center;
   border-radius: 50%;
   background-color: white;
+  color: rgba(56, 119, 238);
   filter: drop-shadow(0px 0px 15px rgba(56, 119, 238, 0.1));
+  user-select: none;
+
+  @media screen and (max-width: 540px) {
+    display: none;
+  }
 
   &.swiper-button-prev {
     left: 0;
-    transform: rotate(180deg);
+
+    &:after {
+      font-size: 14px;
+    }
   }
 
   &.swiper-button-next {
     right: 0;
+
+    &:after {
+      font-size: 14px;
+    }
+  }
+`;
+
+const PaginationWrapper = styled.div`
+  display: none;
+
+  @media screen and (max-width: 540px) {
+    display: block;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .swiper-pagination-bullet {
+    background-color: rgba(56, 119, 238);
+    opacity: 0.4;
+    transition: opacity 0.3s;
+
+    &.swiper-pagination-bullet-active {
+      opacity: 1;
+    }
   }
 `;
 
@@ -101,6 +124,7 @@ const SlideContent = styled.div`
   justify-content: flex-start;
   gap: 15px;
   padding: 54px 0;
+
   @media screen and (max-width: 540px) {
     width: 166px;
   }
@@ -111,6 +135,7 @@ const SlideContent = styled.div`
     color: #3877ee;
     text-transform: uppercase;
     line-height: 120%;
+
     @media screen and (max-width: 540px) {
       font-size: 16px;
     }
@@ -118,18 +143,20 @@ const SlideContent = styled.div`
 
   p {
     font-size: 20px;
-    color: #42567a;
+    color: #42567AFF;
     line-height: 30px;
+
     @media screen and (max-width: 540px) {
       font-size: 14px;
     }
   }
 `;
+
 const SwiperSlideWrapper = styled.div`
   opacity: 1;
   transition: opacity 0.3s ease-in-out;
-  position:relative;
-  z-index:100;
+  position: relative;
+  z-index: 100;
 
   &.fading {
     opacity: 0;

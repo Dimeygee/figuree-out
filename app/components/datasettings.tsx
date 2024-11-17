@@ -50,12 +50,12 @@ export const DateSettings = ({
         </DateBox>
         <ArrowBox>
           <span onClick={() => handleArrowClick("left")}>
-            <Arrow className="swiper-button-prev">
+            <Arrow className="prev-button">
               <SliderArrow />
             </Arrow>
           </span>
           <span onClick={() => handleArrowClick("right")}>
-            <Arrow className="swiper-button-next">
+            <Arrow className="next-button">
               <SliderArrow />
             </Arrow>
           </span>
@@ -122,12 +122,12 @@ const Arrow = styled.div`
     height: 40px;
   }
 
-  &.swiper-button-prev {
+  &.prev-button {
     left: 0;
     transform: rotate(180deg);
   }
 
-  &.swiper-button-next {
+  &.next-button {
     right: 0;
   }
 `;
