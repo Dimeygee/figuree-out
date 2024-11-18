@@ -24,35 +24,39 @@ interface SliderProps {
 }
 
 export const Slider: React.FC<SliderProps> = ({ data, fading }) => {
-  return (
-    <SwiperSlideWrapper className={fading ? "fading" : ""}>
-      <Arrow className="swiper-button-prev"></Arrow>
-      <Arrow className="swiper-button-next"></Arrow>
 
-      <Swiper
-        slidesPerView={"auto"}
-        spaceBetween={80}
-        navigation={{
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        }}
-        pagination={{
-          clickable: true,
-          el: ".swiper-pagination", 
-        }}
-        modules={[Navigation, Pagination]}
-      >
-        {data.events.map((event, index) => (
-          <SwiperSlide key={index} style={{ width: "auto" }}>
-            <SlideContent>
-              <h3>{event.year}</h3>
-              <p>{event.event}</p>
-            </SlideContent>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-      <PaginationWrapper className="swiper-pagination"></PaginationWrapper>
-    </SwiperSlideWrapper>
+  return (
+    <>
+    
+      <SwiperSlideWrapper className={fading ? "fading" : ""}>
+        <Arrow className="swiper-button-prev"></Arrow>
+        <Arrow className="swiper-button-next"></Arrow>
+        
+        <Swiper
+          slidesPerView={"auto"}
+          spaceBetween={80}
+          navigation={{
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          }}
+          pagination={{
+            clickable: true,
+            el: ".swiper-pagination",
+          }}
+          modules={[Navigation, Pagination]}
+        >
+          {data.events.map((event, index) => (
+            <SwiperSlide key={index} style={{ width: "auto" }}>
+              <SlideContent>
+                <h3>{event.year}</h3>
+                <p>{event.event}</p>
+              </SlideContent>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+        <PaginationWrapper className="swiper-pagination"></PaginationWrapper>
+      </SwiperSlideWrapper>
+    </>
   );
 };
 
@@ -123,10 +127,13 @@ const SlideContent = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   gap: 15px;
-  padding: 54px 0;
+  padding-top:54px;
+  padding-bottom:54px;
 
   @media screen and (max-width: 540px) {
     width: 166px;
+    padding-bottom:54px;
+    padding-top:0px;
   }
 
   h3 {
@@ -164,3 +171,6 @@ const SwiperSlideWrapper = styled.div`
 
   position: relative;
 `;
+
+
+

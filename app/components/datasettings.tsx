@@ -44,6 +44,11 @@ export const DateSettings = ({
 
   return (
     <>
+      <CurrentDateName fading={isFading}>
+        <div>
+          {["Один", "Два", "Три", "Четыре", "Пять", "Шесть"][activeIndex - 1]}
+        </div>
+      </CurrentDateName>
       <DateSettingsWrapper>
         <DateBox>
           <span>0{activeIndex}</span>/<span>06</span>
@@ -130,4 +135,26 @@ const Arrow = styled.div`
   &.next-button {
     right: 0;
   }
+`;
+
+const CurrentDateName = styled.div<{ fading: boolean }>`
+  color: #42567a;
+  font-weight: 700;
+  position: absolute;
+  top: 45%;
+  text-align: center;
+  display:none;
+
+  div {
+    opacity: ${(props) => (props.fading ? 0 : 1)};
+    transition: opacity 0.3s ease-in-out;
+    position: relative;
+    z-index: 100;
+  }
+
+  @media screen and (max-width: 540px) {
+    display:flex;
+  }
+
+
 `;

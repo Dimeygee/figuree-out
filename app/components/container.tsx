@@ -48,6 +48,7 @@ export default function Container() {
               <div className="text-wrapper">
                 <span>{index + 1}</span>
               </div>
+              <span className="date-name"> {["Один", "Два", "Три", "Четыре", "Пять", "Шесть"][index]}</span>
             </Number>
           ))}
         </Circle>
@@ -185,8 +186,26 @@ const Number = styled.div<NumberProps>`
   cursor: pointer;
   transition: all 0.3s ease;
 
+  .date-name {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: rotate(-${(props) => (props.isactive ? "300" : props.deg)}deg)
+      translate(50px, 5px);
+    font-size: 16px;
+    font-weight: 600;
+    color: #42567a;
+    opacity: ${(props) => (props.isactive ? 1 : 0)};
+    visibility: ${(props) => (props.isactive ? "visible" : "hidden")};
+    white-space: nowrap;
+
+    transition: opacity 0.3s ease ${(props) => (props.isactive ? "1s" : "0s")},
+      visibility 0.3s ease ${(props) => (props.isactive ? "1s" : "0s")},
+      transform 0.3s ease ${(props) => (props.isactive ? "1s" : "0s")};
+  }
+
   .text-wrapper {
-    transform: rotate(-${(props) => props.deg}deg);
+    transform: rotate(-${(props) => (props.isactive ? "300" : props.deg)}deg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -200,7 +219,6 @@ const Number = styled.div<NumberProps>`
     }
   }
 
-  /* Hover styling */
   &:hover {
     width: 56px;
     height: 56px;

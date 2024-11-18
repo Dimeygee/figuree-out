@@ -1,10 +1,10 @@
 
-export interface HistoricalEvent {
+interface HistoricalEvent {
   year: number;
   event: string;
 }
 
-export interface HistoricalData {
+interface HistoricalData {
   fromYear: number;
   toYear: number;
   events: HistoricalEvent[];
